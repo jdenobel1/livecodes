@@ -38,8 +38,8 @@ export const createEditor = async (options: EditorOptions): Promise<CodeEditor> 
 
   let { value, language } = options;
   let currentPosition: EditorPosition = { lineNumber: 1 };
-  const mapLanguage = options.mapLanguage || ((lang: Language) => lang);
-  let mappedLanguage = language === 'wat' ? 'wasm' : mapLanguage(language);
+  const mapLanguage = (lang: Language) => options.mapLanguage?.(lang, 'codejar');
+  let mappedLanguage = mapLanguage(language);
   let editorOptions: ReturnType<typeof convertOptions>;
 
   const preElement: HTMLElement = document.createElement('pre');
@@ -132,7 +132,7 @@ export const createEditor = async (options: EditorOptions): Promise<CodeEditor> 
     value = getValue();
   };
   codejar?.onUpdate(handleUpdate);
-  codejar?.onPaste(handleUpdate);
+  // codejar?.onPaste(handleUpdate);
 
   const getEditorId = () => editorId;
   const getValue = () => (codejar ? codejar.toString() : value);
@@ -266,7 +266,10 @@ export const createEditor = async (options: EditorOptions): Promise<CodeEditor> 
   };
 
   const setTheme = (theme: Theme, editorTheme: Config['editorTheme']) => {
-    const defaultThemes: Record<Theme, CodejarTheme> = { dark: 'vsc-dark-plus', light: 'vs' };
+    const defaultThemes: Record<Theme, CodejarTheme> = {
+      dark: 'livecodes-dark',
+      light: 'livecodes-light',
+    };
     const selectedTheme = getEditorTheme({
       editor: 'codejar',
       editorTheme,
@@ -339,7 +342,7 @@ export const createEditor = async (options: EditorOptions): Promise<CodeEditor> 
   changeSettings(options);
 
   const undo = () => {
-    codejar?.handleUndoRedo(
+    (codejar as any)?.handleUndoRedo(
       new KeyboardEvent('keydown', {
         key: 'Z',
         [ctrl]: true,
@@ -348,7 +351,7 @@ export const createEditor = async (options: EditorOptions): Promise<CodeEditor> 
   };
 
   const redo = () => {
-    codejar?.handleUndoRedo(
+    (codejar as any)?.handleUndoRedo(
       new KeyboardEvent('keydown', {
         key: 'Z',
         [ctrl]: true,

@@ -182,9 +182,9 @@ export const createConsole = (
       container.style.height = height + 'px';
     });
 
-    if (editor) return consoleEditor;
-
     preventFocus(container);
+
+    if (editor) return consoleEditor;
 
     const gutterSelector = consoleEditor.monaco ? '.glyph-margin' : '.cm-gutters';
 
@@ -209,6 +209,7 @@ export const createConsole = (
 
     consoleElement = document.createElement('div');
     consoleElement.id = 'console';
+    consoleElement.tabIndex = -1;
     container.appendChild(consoleElement);
 
     const consoleInput = document.createElement('div');

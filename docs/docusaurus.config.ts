@@ -8,11 +8,18 @@ import sdkPkg from '../src/sdk/package.sdk.json';
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.dracula;
 
+const baseUrl =
+  process.env.DOCS_BASE_URL != null && process.env.DOCS_BASE_URL !== 'null'
+    ? process.env.DOCS_BASE_URL
+    : process.env.BASE_URL != null
+      ? process.env.BASE_URL + 'docs/'
+      : '/docs/';
+
 const config: Config = {
   title: 'LiveCodes',
   tagline: 'A Code Playground That Just Works!',
   url: 'https://livecodes.io/',
-  baseUrl: process.env.DOCS_BASE_URL || '/docs/',
+  baseUrl,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
@@ -152,16 +159,17 @@ const config: Config = {
               label: 'Import...',
               href: 'pathname:///../?screen=import',
             },
-            {
-              label: 'AI Code Assistant 🪄',
-              to: '/features/ai',
-            },
+            // {
+            //   label: 'AI Code Assistant 🪄',
+            //   to: '/features/ai',
+            // },
             {
               label: 'Bookmarklet',
               to: '/bookmarklet',
             },
             {
-              html: `<span style="display: flex; gap: 0.5em; align-items: baseline;"><a href="/docs/llms.txt" target="_blank" class="footer__link-item">llms.txt</a>-<a href="/docs/llms-full.txt" target="_blank" class="footer__link-item">llms-full.txt</a></span>`,
+              label: 'AI Guide',
+              to: '/ai-guide',
             },
           ],
         },
@@ -283,6 +291,7 @@ const config: Config = {
         plugin: ['typedoc-plugin-missing-exports'],
         excludeExternals: true,
         internalModule: '_internal',
+        skipErrorChecking: true,
       },
     ],
     [

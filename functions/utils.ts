@@ -1,5 +1,12 @@
-import { decompress } from './vendors/compression';
-import { starterTemplates } from './vendors/templates';
+/// <reference path="../node_modules/@cloudflare/workers-types/index.d.ts" />
+
+import { decompress } from './vendors/compression.js';
+import { starterTemplates } from './vendors/templates.js';
+
+type Env = Record<'API_TOKEN', string>;
+type Data = Record<string, unknown>;
+export type PgFunction = PagesFunction<Env, 'id', Data>;
+export type Context = EventContext<Env, 'id', Data>;
 
 interface ProjectInfo {
   title?: string;
@@ -73,3 +80,11 @@ export const getProjectInfo = async (url: URL): Promise<ProjectInfo> => {
     description: '',
   };
 };
+
+export const encodeHTML = (html: string) =>
+  html
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/'/g, '&#39;')
+    .replace(/"/g, '&#34;');

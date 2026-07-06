@@ -1,10 +1,4 @@
-/// <reference path="../node_modules/@cloudflare/workers-types/index.d.ts" />
-
-import { getProjectInfo } from './utils';
-
-type Env = Record<'API_TOKEN', string>;
-type Data = Record<string, unknown>;
-type PgFunction = PagesFunction<Env, 'id', Data>;
+import { getProjectInfo, type PgFunction } from './utils.ts';
 
 export const onRequest: PgFunction = async function (context) {
   const request = context.request;
@@ -44,7 +38,7 @@ export const onRequest: PgFunction = async function (context) {
     width: maxWidth && maxWidth < 800 ? String(maxWidth) : '800',
     thumbnail_width: String(thumbnailWidth),
     thumbnail_height: String(thumbnailHeight),
-    thumbnail_url: url.origin + '/livecodes/assets/images/livecodes-text-logo.png',
+    thumbnail_url: url.origin + '/livecodes/assets/images/oembed.png',
     html: `<iframe
         src="${url.href}"
         scrolling="no"
